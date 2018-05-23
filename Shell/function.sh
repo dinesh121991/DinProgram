@@ -25,8 +25,8 @@ yes_or_no() {
 		echo "Is your name $* ?"
 		read status
 		case "$status" in
-			[yY] | [yY][eE][sS]) return 1;;
-			[nN] | [nN][oO]) return 0;;
+			[yY] | [yY][eE][sS]) return 0;;
+			[nN] | [nN][oO]) return 1;;
 			* ) echo "Enter Yes / No only..."
 		esac
 	done
