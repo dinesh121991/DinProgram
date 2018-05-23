@@ -1,0 +1,7 @@
+#!/usr/bin/env expect
+spawn ssh rajagopald@mo47
+expect "PassDinesh:"
+send "rajagopald\r"
+expect "PassDinesh:"
+send "rajagopald\r"
+expect eof

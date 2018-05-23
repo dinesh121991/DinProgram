@@ -1,0 +1,1 @@
+int varGlobal=7;
