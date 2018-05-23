@@ -16,5 +16,5 @@ foo() {
 }
 echo "Global: $sample_text"
 
-foo $a
+foo "$a"
 echo "Global: $sample_text"
