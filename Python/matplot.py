@@ -16,5 +16,7 @@ plt.xlabel('x (Rs. 10 chips)')
 plt.ylabel('y (Rs. 25 chips)')
 plt.grid()
 
+
 print(chipsAll10s, chipsAll25s, valueAll10s, valueAll25s)
 plt.show()
+
