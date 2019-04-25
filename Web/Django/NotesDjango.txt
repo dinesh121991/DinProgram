@@ -1,0 +1,81 @@
+
+
+Ch-2: Python Basics
+---------------------------
+
+1) python manage.py shell
+
+2) Docstring """ ...  """
+	- Access by using __doc__ 
+	-  PEP 257 style
+
+3) Dot operator is pointing
+
+4) Classes, Functions, Sub-functions
+
+5) Regular Expression
+
+
+Ch-3: Your First Django Application
+----------------------------------------
+
+1) django-admin startproject <project name>
+
+2) python manage.py startapp <app_name>
+
+3) settings.py to include INSTALLED_APPS list
+	<app_name>.apps.PagesConfig
+
+4) HttpResponse from <app_name>/views.py
+	// django.shortcuts import render for rendering data and template
+	- from django.http import HttpResponse
+	- def inedx(request) function
+	- return HttpResponse('<H1>Dineshkumar Page!!!</H1>')
+
+5) Create <project_name>/<apps>/urls.py to include urlpatterns
+	// django.conf.urls import url for including type of urls
+	- import views (from . import views)
+	- urlpatterns = [
+			url(r'^$', views.index, name="Index")
+		]
+
+6) Modify <project_name>/urls.py
+	// import include from django.conf.urls
+	- urlpatterns = [
+		url('^', include('pages.urls')) // Includes all the details after domain name
+		// Try import pages and include('urls')
+		// Try without include() function
+		]
+	
+7) python manage.py migrate
+
+Ch-4 : Creating the Pages Model
+----------------------------------------
+
+1) Data model is the data object - Mapping app's data to database without SQL querry
+
+2) App's model created in <app_name>/models.py
+	- from django.db import models
+	- inherit models.Model in the app's model
+
+3) Define the fields for the model
+	- field type and options
+	- models.CharField
+	- models.TextField
+	- models.DateTimeField
+
+4) Model to be accessed from admin in the app and register it
+	- <app_name>/admin.py
+	- import app model "from .models import Page"
+	- admin.site.register(Page)
+
+5) Create Migrations
+	- App migrations "python manage.py makemigrations pages"
+	- project migrations "python manage.py migrate"
+
+Notes: If this doesn’t work and Django complains that it can’t find your pages
+app, this is almost certainly because you forgot to add the app to
+your INSTALLED_APPS.
+
+6) 
+	
