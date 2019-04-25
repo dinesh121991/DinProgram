@@ -1,0 +1,32 @@
+# Regression Test
+--------------------------
+
+How-to
+Create a file in the directory of the slurm source code under slurm/testsuite/expect/globals.local
+To contain the following.  This will overwrite the existing globals file with your specific directories.  To define site-specific state information, set the values in a file# named 'globals.local'. Those values will override any specified here.  Create the directory to point to your own source directory, your own build directory, where slurm is installed and where mpicc is installed. 
+
+# for example:
+
+$ cat globals.local
+
+set slurm_dir  "/usr/local"
+
+set build_dir  "/home/mine/SLURM/build_smd"
+
+set src_dir    "/home/mine/SLURM/slurm.git"
+
+set mpicc      "/usr/local/bin/mpicc"
+
+Make sure that your slurm is running and the environment variables are pointing to the right slurm and issue the following command
+nohup ./regression > <filename.log>  2>&1 &
+
+For example
+
+nohup ./regression >/app/slurm/nlk/regression_results/17.02-7.Bull.1.16.59.el7.log 2>&1 &
+
+Once the tests have completed you can now open the log file from above, do a search on the word failures and see which tests failed.
+
+The total of the tests is shown at the bottom of the file.  
+
+
+
