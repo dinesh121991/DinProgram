@@ -85,56 +85,61 @@ If you are diskless, save your configuration in your home.
 
 Sregistry and Srepo support, Go language in high level
 
+https://singularityhub.github.io/sregistry/
+https://singularity-hub.org/collections
+
+Singularity recipie, Singularity Image repositories.
+
 singularity 3 version	srun	sbatch	salloc	plugstack.conf		
 						
---container-image=<image|sregistry-id>	Y	Y	Y			
---container-bind=<bind-path(s)>	Y	Y	Y			
---container-contain=yes	Y	Y	Y			
---container-epilog=<epilog-exec>	Y	Y	Y			
---container-pid=<pid-path>	Y	Y	Y			
---container-workdir=<workdir-path>	Y	Y	Y			
---sregistry-timeout=<seconds>	Y	Y	Y			
---container-instance=<path>[:myinstance]		Y	Y			
---container-instance=<myinstance>	Y	Y	Y			
+--container-image=<image|sregistry-id>						
+--container-bind=<bind-path(s)>						
+--container-contain=yes						
+--container-epilog=<epilog-exec>						
+--container-pid=<pid-path>						
+--container-workdir=<workdir-path>						
+--sregistry-timeout=<seconds>						
+--container-instance=<path>[:myinstance]						
+--container-instance=<myinstance>						
 						
-default_image=<image|sregistry-id|instance://myinstance>				Y		
-default_bind_path=<bind-path(s)>				Y		
-default_contain=yes				Y		
-default_epilog_path=<epilog-exec>				Y		
-default_overlay_path=<overlay-path>				Y		
-sregistry_path=<sregistry-images-path>				Y		
-default_pid_path=<pid-path>				Y		
-default_workdir_path=<workdir-path>				Y		
-default_sregistry_timeout=<seconds>				Y		
+default_image=<image|sregistry-id|instance://myinstance>						
+default_bind_path=<bind-path(s)>						
+default_contain=yes						
+default_epilog_path=<epilog-exec>						
+default_overlay_path=<overlay-path>						
+sregistry_path=<sregistry-images-path>						
+default_pid_path=<pid-path>						
+default_workdir_path=<workdir-path>						
+default_sregistry_timeout=<seconds>						
 						
 singularity 2.5.2 containers framework	srun	sbatch	salloc	plugstack.conf		
 						
---singularity-image=<image|sregistry-id>	Y	Y	Y			
---singularity-bind=<bind-path(s)>	Y	Y	Y			
---singularity-contain=yes	Y	Y	Y			
---singularity-epilog=<epilog-exec>	Y	Y	Y			
---singularity-pid=<pid-path>	Y	Y	Y			
---singularity-workdir=<workdir-path>	Y	Y	Y			
---sregistry-timeout=<seconds>	Y	Y	Y			
+--singularity-image=<image|sregistry-id>						
+--singularity-bind=<bind-path(s)>						
+--singularity-contain=yes						
+--singularity-epilog=<epilog-exec>						
+--singularity-pid=<pid-path>						
+--singularity-workdir=<workdir-path>						
+--sregistry-timeout=<seconds>						
 						
-default_image=<image|sregistry-id>				Y		
-default_bind_path=<bind-path(s)>				Y		
-default_contain=yes				Y		
-default_epilog_path=<epilog-exec>				Y		
-default_overlay_path=<overlay-path>				Y		
-sregistry_path=<sregistry-images-path>				Y		
-default_pid_path=<pid-path>				Y		
-default_workdir_path=<workdir-path>				Y		
-default_sregistry_timeout=<seconds>				Y		
+default_image=<image|sregistry-id>						
+default_bind_path=<bind-path(s)>						
+default_contain=yes						
+default_epilog_path=<epilog-exec>						
+default_overlay_path=<overlay-path>						
+sregistry_path=<sregistry-images-path>						
+default_pid_path=<pid-path>						
+default_workdir_path=<workdir-path>						
+default_sregistry_timeout=<seconds>						
 						
 singularity prototype	srun	sbatch	salloc	plugstack.conf	sg_spank.conf	shortcut
 						
---sgdebug	Y					
---singularity-image=<image>	Y					--sgimage
---singularity-env=<env_script>	Y					--sgenv
+--sgdebug						
+--singularity-image=<image>						--sgimage
+--singularity-env=<env_script>						--sgenv
 						
-install_dir=<install-dir-path>					Y	
-swrepo_sync_dir=<swrepo-dir-path>					Y	
+install_dir=<install-dir-path>						
+swrepo_sync_dir=<swrepo-dir-path>						
 
 
 # GHC topology
@@ -147,7 +152,7 @@ swrepo_sync_dir=<swrepo-dir-path>					Y
 	- Order coordinate by hilbert curve to covert n dimension to 1 dimension
 	- Select nodes out of the hilbert curve
 3) Flat tree inside the cell and GHC topology for inter cell
-
+4) Dragonfly and Dragonfly+ topology support
 
 # PAM and PAM adopt plugin
 ----------------------------
@@ -155,4 +160,33 @@ swrepo_sync_dir=<swrepo-dir-path>					Y
 2) pam_adopt with cgroup
 
 
+# Netowrk topology benchmark
+------------------------------
+1) HP2P benchmark
+https://github.com/cea-hpc/hp2p
 
+2) Linktest benchmark
+
+Avoid random test to get better results
+
+# Compute benchmark
+-------------------------
+
+1) HPL - HPlinpack
+2) Intel MPI benchmark
+3) Miniapp (cloverleaf, etc) to reprsent domain
+
+# Slurmtop
+
+# PMI2 and PMIx support
+
+# d-mod-k aware routing
+
+# MPMD programming with gromacs_interactive
+https://bitbucket.org/matthieu_dreher/gromacs_interactive // Matthieu Drehher
+
+# MPI with FTI programming interface to support different checkpoint restart 
+
+# SAM, Singularity pack, Spack and Easybuild support
+
+# SOLID principle in the Python OOP programming
