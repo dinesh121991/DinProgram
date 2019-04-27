@@ -1,0 +1,186 @@
+Simple Notes
+1) Quoting
+-------------
+Before moving on, you should be clear about one feature of the shell: the use of quotes.
+Normally, parameters in scripts are separated by whitespace characters (e.g., a space, a tab, or a newline
+character). If you want a parameter to contain one or more whitespace characters, you must quote the
+parameter.
+The behavior of variables such as $foo inside quotes depends on the type of quotes you use. If you
+enclose a $ variable expression in double quotes, then it’s replaced with its value when the line is exe-
+cuted. If you enclose it in single quotes, then no substitution takes place. You can also remove the special
+meaning of the $ symbol by prefacing it with a \ .
+Usually, strings are enclosed in double quotes, which protects variables from being separated by white
+space but allows $ expansion to take place.
+
+2) Output Redirection
+-------------------------
+If you prefer to capture both sets of output into a single file, you can use the >& operator to combine the
+two outputs. Therefore,
+$ kill -1 1234 >killouterr.txt 2>&1
+will put both the output and error outputs into the same file. Notice the order of the operators. This
+reads as “redirect standard output to the file killouterr.txt , and then direct standard error to the
+same place as the standard output.” If you get the order wrong, the redirect won’t work as you expect.
+Because you can discover the result of the kill command using the return code (discussed in more
+detail later in this chapter), you don’t often want to save either standard output or standard error. You
+can use the Linux universal “bit bucket” of /dev/null to efficiently discard the entire output, like this:
+$ kill -1 1234 >/dev/null 2>&1
+
+Rather like redirecting output, you can also redirect input. For example,
+$ more < killout.txt
+
+3) Pipe
+-----------
+$ ps –xo comm | sort | uniq | grep -v sh | more
+This takes the output of ps , sorts it into alphabetical order, extracts processes using uniq , uses grep -v
+sh to remove the process named sh , and finally displays it paginated on the screen.
+
+As you can see, this is a much more elegant solution than a string of separate commands, each with its
+own temporary file. However, be wary of one thing here: If you have a string of commands, the output
+file is created or written to immediately when the set of commands is created, so never use the same file-
+name twice in a string of commands. If you try to do something like
+cat mydata.txt | sort | uniq > mydata.txt
+you will end up with an empty file, because you will overwrite the mydata.txt file before you read it.
+
+
+4) Globbing
+------------
+The shell also performs wildcard expansion (often referred to as globbing). You are almost certainly
+aware of the use of ‘*‘ as a wildcard to match a string of characters. What you may not know is that
+you can request single-character wildcards using ? , while [set] allows any of a number of single char-
+acters to be checked. [^set] negates the set — that is, it includes anything but the set you’ve specified.
+Brace expansion using {} (available on some shells, including bash ) allows you to group arbitrary
+strings together in a set that the shell will expand. For example,
+$ ls my_{finger,toe}s
+
+will list the files my_fingers and my_toes . This command uses the shell to check every file in the cur-
+rent directory.
+
+5) Synonymous Construction
+------------------------------
+Experienced Linux users would probably perform this simple operation in a much more efficient way,
+perhaps with a command such as
+$ more `grep -l POSIX *`
+or the synonymous construction
+$ more $(grep -l POSIX *)
+In addition,
+$ grep -l POSIX * | more
+will output the name of the file whose contents contained the string POSIX . In this script, you see the
+shell making use of other commands, such as grep and more , to do the hard work. The shell simply
+enables you to glue several existing commands together in new and powerful ways. You will see wild-
+card expansion used many times in the following scripts, and we’ll look at the whole area of expansion
+in more detail when we look at regular expressions in the section on the grep command.
+Going through this long rigmarole every time you want to execute a sequence of commands is a bore.
+You need to store the commands in a file, conventionally referred to as a shell script, so you can execute
+them whenever you like.
+
+If you prefer, you can use the rather longer, but perhaps more obvious, form of the chmod command:
+# chmod u=rwx,go=rx /usr/local/bin/first
+# chmod 755 /usr/local/bin/first 
+
+
+6) Directory Permission
+--------------------------
+In Linux you can delete a file if you have write permission on the directory that
+contains it. To be safe, ensure that only the superuser can write to directories con-
+taining files that you want to keep safe. This makes sense because a directory is just
+another file, and having write permission to a directory file allows users to add and
+remove names.
+
+7) Expand the content of a variable
+-------------------------------------
+The variable myvar is created and assigned the string Hi there . The contents of the variable are dis-
+played with the echo command, showing how prefacing the variable with a $ character expands the
+contents of the variable. You see that using double quotes doesn’t affect the substitution of the variable,
+while single quotes and the backslash do. You also use the read command to get a string from the user.
+
+8) Parameter Variable	|	Description
+------------------------------------------------
+$1, $2, ... 		|	The parameters given to the script
+
+$* 			|	A list of all the parameters, in a single variable, separated by the first
+			|	character in the environment variable IFS . If IFS is modified, then
+			|	the way $* separates the command line into parameters will change.
+
+$@ 			|	A subtle variation on $* ; it doesn’t use the IFS environment vari-
+			|	able, so parameters are not run together even if IFS is empty.
+
+
+9) Case & Variable Pattern
+--------------------------------
+
+Be careful with the case construct if you are using wildcards such as ‘*‘ in the pat-
+tern. The problem is that the first matching pattern will be taken, even if a later
+pattern matches more exactly.
+
+	case variable in
+	pattern [ | pattern] ...) statements;;
+	pattern [ | pattern] ...) statements;;
+	...
+	esac
+
+Example:
+	case “$timeofday” in
+	yes | y | Yes | YES )
+	n* | N* )
+	* )
+	esac
+
+To make the case matching more powerful, you could use something like this:
+	[yY] | [Yy][Ee][Ss] )
+
+10) AND, OR List with Statement Blocks
+--------------------------------------------
+
+f you want to use multiple statements in a place where only one is allowed, such as in an AND or OR
+list, you can do so by enclosing them in braces {} to make a statement block. For example, in the appli-
+cation presented later in this chapter, you’ll see the following code:
+	get_confirm && {
+		grep -v “$cdcatnum” $tracks_file > $temp_file
+		cat $temp_file > $tracks_file
+		echo
+		add_record_tracks
+	}
+
+11) break, continue, source (.), null command (:)
+-----------------------------------------------------
+You may see it used as a condition for while loops; while : implements an infinite loop in place of the
+more common while true .
+
+The : construct is also useful in the conditional setting of variables. For example,
+	: ${var:=value}
+Without the : , the shell would try to evaluate $var as a command
+
+	if [ -f fred ]; then
+		:
+	else
+		echo file fred did not exist
+	fi
+
+12) eval - evaluate variable
+-----------------------------
+foo=10
+x=foo
+eval y=’$’$x
+echo $y
+
+13) exec - fork shell command
+------------------------------
+exec wall “Thanks for all the fish”
+in a script will replace the current shell with the wall command. No lines in the script after the exec
+will be processed, because the shell that was executing the script no longer exist
+
+The second use of exec is to modify the current file descriptors:
+exec 3< afile
+This causes file descriptor three to be opened for reading from file afile . It’s rarely used.
+
+14) expr
+---------------
+The expr command evaluates its arguments as an expression. It’s most commonly used for simple arith-
+metic in the following form:
+x=`expr $x + 1`
+
+
+15) (printf, echo) (exit, return), (expr, ARITHMTIC EVALUATION)
+
+16) Parameter Expansion
+---------------------------
