@@ -1,0 +1,4 @@
+CREATE DATABASE tissueinfo;
+GRANT USAGE ON tissueinfo.* to rajagopald@localhost IDENTIFIED BY 'rajagopald';
+
+

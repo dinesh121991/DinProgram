@@ -1,0 +1,116 @@
+
+
+Ch-5: Python Basics
+---------------------------
+
+1) python manage.py shell
+
+2) Docstring """ ...  """
+	- Access by using __doc__ 
+	-  PEP 257 style
+
+3) Dot operator is pointing
+
+4) Classes, Functions, Sub-functions
+
+5) Regular Expression
+
+
+Ch-6: Your First Django Application
+----------------------------------------
+
+1) django-admin startproject <project name>
+
+2) python manage.py startapp <app_name>
+
+3) settings.py to include INSTALLED_APPS list
+	<app_name>.apps.PagesConfig
+
+4) HttpResponse from <app_name>/views.py
+	// django.shortcuts import render for rendering data and template
+	- from django.http import HttpResponse
+	- def inedx(request) function
+	- return HttpResponse('<H1>Dineshkumar Page!!!</H1>')
+
+5) Create <project_name>/<apps>/urls.py to include urlpatterns
+	// django.conf.urls import url for including type of urls
+	- import views (from . import views)
+	- urlpatterns = [
+			url(r'^$', views.index, name="Index")
+		]
+
+6) Modify <project_name>/urls.py
+	// import include from django.conf.urls
+	- urlpatterns = [
+		url('^', include('pages.urls')) // Includes all the details after domain name
+		// Try import pages and include('urls')
+		// Try without include() function
+		]
+	
+7) python manage.py migrate
+
+Ch-7 : Creating the Pages Model
+----------------------------------------
+
+1) Data model is the data object - Mapping app's data to database without SQL querry
+
+2) App's model created in <app_name>/models.py
+	- from django.db import models
+	- inherit models.Model in the app's model
+
+3) Define the fields for the model
+	- field type and options
+	- title		= models.CharField(max_length=60)
+	- perma_link	= models.TextFieldmax_length=12, unique=True)
+	- update_date	= models.DateTimeField('Last Updated')
+	- bodytext	= models.TextField('Page Content', blank=True)
+
+4) Model to be accessed from admin in the app and register it
+	- <app_name>/admin.py
+	- import admin "from django.contrib import admin"
+	- import app model "Eg. from .models import Page"
+	- admin.site.register(Page)
+
+5) Create Migrations
+	- App migrations "python manage.py makemigrations pages"
+	- project migrations "python manage.py migrate"
+
+Notes: If this doesn't work and Django complains that it cann't find your pages
+app, this is almost certainly because you forgot to add the app to
+your INSTALLED_APPS.
+
+6) Admin Interface 
+	- Backend site manager to moderate user generated comments
+	- Post to your blog
+	- Trusted site admin (Add, Delete and Edit site content)
+	- Update the press release
+	- Built in admin interface to add content to our page
+
+	- Crate an admin user to login (python manage.py createsuperuser)
+	- URL/admin/ list your registered models
+7) __str__ function defined inside Model to return human readable details.
+Note: If there is no __str__ method, then the Object Type (Page object) will be returned.
+
+8) Define administrator class for Page models to improve admin interface
+	- PageAdmin class to inherit (admin.ModelAdmin)
+		- list_display = ('title','update_date') // What to display
+		- ordering = ('title',)		// Sorting by the attribute
+		- search_fields = ('title',)	// Search the model objects by name
+	- register site with PageAdmin class "Eg. admin.site.register(Page, PageAdmin)"
+
+Ch - 8: Django Templates
+-----------------------------
+
+1) HTML site template, Django template tag
+2) TEMPLATES settings in settings.py
+	- DIR : [os.path.join(BASE_DIR, "<project_name>/template")]
+	- APPS_DIR : True
+3) STATIC FILES
+	- STATIC_URL = "/static/"
+	- STATIC_FILES_DIR = [os.path.join(BASE_DIR, 'mfdw_site/static'),]
+4) include all the templates and static files
+5) <app_name>/views.py
+	- from from django.shortcuts import render
+	- return render(request, "base.html")
+
+	

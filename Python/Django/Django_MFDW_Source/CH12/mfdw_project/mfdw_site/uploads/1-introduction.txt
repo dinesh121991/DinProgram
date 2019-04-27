@@ -1,0 +1,39 @@
+1
+Introduction
+When I first published Mastering Django: Core, it was both as a challenge to myself to see if I could do it, and an opportunity to contribute to a project I love to work with.
+I honestly thought that, as long as a few people got value out of the work, all would be good in the world. Never would I have imagined myself being here, a little more than a year down the track, getting ready to launch my second book on Django!
+The feedback on Mastering Django: Core from the Django community has been fantastic—with many corrections, suggestions and new ideas put forward from both beginner and experienced programmers. 
+I am also now the proud custodian of the djangobook.com website, which was graciously passed to me by the original creators of Django. The site, having relaunched in September 2016, passed half a million page views in February 2017 and 50,000 visitors per month in March 2017. 
+To say I am gobsmacked by such support from the community would be an understatement. Encouraged by you all, this book is a response to that feedback and support.
+Where Core was an “everything and the kitchen sink” kind of deal, Build Your First Website with Python and Django is very much an introduction to web programming using Django. 
+The goal of this book was to answer the three most common questions I get from beginning programmers:
+Why should I use Django—what problems does it help me solve?
+What if I don’t know Python?
+Forget snippets!—how do I use Django to write a real website?
+
+Ultimately, it’s up to you as the reader to judge whether I met my goals, but as always, my commitment remains—write the very best book I can and keep it up to date so it meets your needs now and in the future.
+Who this book is for
+This book is for beginners with no experience of either Python, Django or web programming. A basic understanding of how to write and structure computer programs is an advantage, however writing well structured code is something that you pick up naturally the more code you write. Having a basic understanding of HTML would also be an advantage, but not necessary. 
+In the few sections of the book that touch on concepts outside of the scope of the book, I provide full references.
+Please note, this book is an introduction to Python and Django. While the result of your efforts will be a fully functioning website, this book explicitly does not cover what comes next—migrating to a professional database and moving to a host. Resources on where to go after you have completed the material in the book are provided in the final chapter—Next Steps.
+Structure of the Book
+This is a project driven book, rather than dry theory and code snippets. 
+You will learn by doing—at each step you will put what you have learned into practice so that, by the end of the book, you will have a functioning website to call your own.
+To support your learning, the first four chapters are aimed at answering the first two of the common beginner questions. Namely:
+In Chapter 2, I outline the benefits of using Django for your websites;
+In Chapter 3, I provide the high-level outline of the structure of Django and how each of the pieces fit together to create a powerful, scalable website;
+In Chapter 4, we will install Python and Django; and
+In Chapter 5, I will give you an introductory tutorial in Python, aimed at covering the elements of Python relevant to Django, so you aren’t trying to learn Python and Django at the same time.
+
+The rest of the book focuses on teaching you Django while you build your website. Each chapter introduces a new aspect of Django, with full source code and a line-by-line explanation of the code so you know what is going on with your program. I also introduce troubleshooting and debugging as you go along so you know what to do when things go wrong.
+Software Versions
+This is an introductory text that does not require any special functions or libraries, so the latest versions of Python 3 and Django are ok. At the time of writing this is Python 3.6.1 and Django 1.10.6.
+Python 2 or 3?
+Unfortunately, this question comes up too often. The simple and only answer for beginners is Python 3.
+Most of the arguments for sticking with Python 2 are now irrelevant, despite the protestations of a vocal minority.
+Django 1.11 (Due April 2017) will be the last Django to support Python 2.
+If you ever have to use Python 2 (due to old code or needing a legacy library), the differences between the two versions of Python are not enough to lose sleep over.
+Happy Python 3 programmers are happy Python 2 programmers. Moving on. 
+Source Code
+While this book is in development, the source code will be a part of your download from Gumroad. The source will only include files up to the currently published section of the book. 
+If you aren’t able to download the code, or want the absolute latest, send me an email to nigel@masteringdjango.com.
