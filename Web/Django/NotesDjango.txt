@@ -108,9 +108,49 @@ Ch - 8: Django Templates
 3) STATIC FILES
 	- STATIC_URL = "/static/"
 	- STATIC_FILES_DIR = [os.path.join(BASE_DIR, 'mfdw_site/static'),]
+	- Separating static files from Template to easier to scale the application
 4) include all the templates and static files
 5) <app_name>/views.py
-	- from from django.shortcuts import render
+	- from django.shortcuts import render
 	- return render(request, "base.html")
 
-	
+6) Extend template
+	- Do not repeat yourself (DRY) to define replacable blocks
+	- Child template to inherit (extends, adds to) from site template
+	- Replace the content of parent template with the unique content by child tamplate
+	- Modify <project_name>/template/base.html to have a replacable blocks
+		- Define Set of django block tags
+		{% block <name> %} {% endblock <name> %}
+	- Create child template
+		- Create template inside <app_name>/templates/<app_name>/pages.html
+		- Namespacing your folder to by defining inner <app_name> folder
+	- Fill the child template
+		- {% extends "base.html" %}
+		- Define bock to replace the content
+	- Change views.py file to rended new child template
+		- render('pages/page.html')
+	- Template extension allows you to focus only on differences (We can reason easily, why we are using this)
+	  This will reduce number of lines in the projects to improve mainenance.
+
+Ch - 9 : Improving your view and Adding Navigation
+---------------------------------------------------------
+
+1) Modify URL to capture page links
+	- Change the urlpatterns to capture 'page' request
+	- url(r'([^/]*)', views.index, name='index'),
+
+2.1) How django works with the models and database
+	- python manage.py shell
+	  from pages.models import Page
+	  pg = Page.objects.get(permalink='/')
+	  pg.title to get the date
+		
+2.2) Rewrite our index view to select the correct page
+	- pass the page as a parameter "pagename"
+	- Define dictionary variable "context"
+	- render with request, template, context
+
+3) Modify our template to dicplay our content
+
+4) Turn the placeholder menu into a navigation menu
+
