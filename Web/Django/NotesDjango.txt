@@ -139,18 +139,36 @@ Ch - 9 : Improving your view and Adding Navigation
 	- Change the urlpatterns to capture 'page' request
 	- url(r'([^/]*)', views.index, name='index'),
 
-2.1) How django works with the models and database
+2) How django works with the models and database
 	- python manage.py shell
 	  from pages.models import Page
 	  pg = Page.objects.get(permalink='/')
+	  pgs = Page.objects.all()
 	  pg.title to get the date
 		
-2.2) Rewrite our index view to select the correct page
+
+3) Modify our template to display our content
+3.1) Rewrite our index view to select the correct page
 	- pass the page as a parameter "pagename"
 	- Define dictionary variable "context"
 	- render with request, template, context
 
-3) Modify our template to dicplay our content
+3.2) Testing the view
+	- 'assert False' before rendering the html file
+
+3.3) Improve the page template
+	- Include the "context variables" in the template file
+	- Django automatically "autoescape" HTML before rendering for preventing attacker to inject the code
+	- Include <page last updated> and set the page title
 
 4) Turn the placeholder menu into a navigation menu
+	- Pass all the objects in the context dictionary
+	- In the page.html, we displayed all the list by looping
+	- <nav id=> is the tag to display side navigation
+	
+5) More tags and filters
+	- from django.shortcuts import get_object_or_404
+	- Debug is True, then the 404 will not be displayed
+	- runserver with --insecure option
+	- Define "404.html" template in the site location and it extends site template 
 
