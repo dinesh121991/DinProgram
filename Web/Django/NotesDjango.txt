@@ -231,4 +231,28 @@ Ch - 10: Creating a Contact Form
 		- Form will be loaded from templates
 		- Request is having "submitted" parameter, then the "Thanks" message displayed
 
+Ch - 11 : Build a more complex Form:
+----------------------------------------------
 
+1) Get users info (sales, survey and personal info) and store it in the database.
+	- Creating forms from Django model (ModelForm)
+	- Customers (new / existing) request for quotation
+
+	Procedure
+	-------------
+1. Create the quotes app
+	- Django app should do one thing (python manage.py startapp quotes)
+2. Create the Quote model and add it to the database
+	-
+3. Add the Quote model to the Django admin
+	-
+4. Create the QuoteForm model form for collecting the quote request
+information from the user
+	-
+5. Add a new view to manage the form
+	-
+6. Create the form template
+	-
+7. Add our new view and form to our urls.py and update the site
+template to link to the quote form
+	-
