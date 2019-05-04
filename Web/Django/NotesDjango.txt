@@ -113,4 +113,20 @@ Ch - 8: Django Templates
 	- from from django.shortcuts import render
 	- return render(request, "base.html")
 
-	
+6) DRY (Don't Repeat Yourself) principle to extend the page
+	- Do not repeat the same information in all of our templates
+	- Define replacable blocks in the parent template
+		- {% block <name> %} {% endblock <name> %}
+	- Define child template inside app
+		app_name/templates/app_name/template_name.html
+		- inner app_name folder for namespacing your templates to retrive right template
+		- Extend the parent template "{% extends "base.html" %}"
+		- Define block contents to replace parent block content
+	- static files are separated to improve scalability
+
+Ch - 9: Improving your view and adding Navigation
+---------------------------------------------------
+
+1) 
+		
+	-

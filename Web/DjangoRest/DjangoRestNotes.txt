@@ -1,0 +1,5 @@
+Ch -1) Quickstart
+
+1) Application has been created within the project directory, so Using the project's namespace avoids name clashes with external modules
+
+
