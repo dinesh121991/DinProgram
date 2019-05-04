@@ -36,7 +36,7 @@ Ch-6: Your First Django Application
 	// django.conf.urls import url for including type of urls
 	- import views (from . import views)
 	- urlpatterns = [
-			url(r'^$', views.index, name="Index")
+			url(r'^$', views.index, name="Index"),
 		]
 
 6) Modify <project_name>/urls.py
@@ -87,7 +87,7 @@ your INSTALLED_APPS.
 	- Built in admin interface to add content to our page
 
 	- Crate an admin user to login (python manage.py createsuperuser)
-	- URL/admin/ list your registered models
+	- URL "/admin/" list your registered models
 7) __str__ function defined inside Model to return human readable details.
 Note: If there is no __str__ method, then the Object Type (Page object) will be returned.
 
@@ -96,7 +96,7 @@ Note: If there is no __str__ method, then the Object Type (Page object) will be 
 		- list_display = ('title','update_date') // What to display
 		- ordering = ('title',)		// Sorting by the attribute
 		- search_fields = ('title',)	// Search the model objects by name
-	- register site with PageAdmin class "Eg. admin.site.register(Page, PageAdmin)"
+	- register page model with PageAdmin class "Eg. admin.site.register(Page, PageAdmin)"
 
 Ch - 8: Django Templates
 -----------------------------
@@ -108,11 +108,13 @@ Ch - 8: Django Templates
 3) STATIC FILES
 	- STATIC_URL = "/static/"
 	- STATIC_FILES_DIR = [os.path.join(BASE_DIR, 'mfdw_site/static'),]
+	- Separating static files from Template to easier to scale the application
 4) include all the templates and static files
 5) <app_name>/views.py
-	- from from django.shortcuts import render
+	- from django.shortcuts import render
 	- return render(request, "base.html")
 
+<<<<<<< HEAD
 6) DRY (Don't Repeat Yourself) principle to extend the page
 	- Do not repeat the same information in all of our templates
 	- Define replacable blocks in the parent template
@@ -129,4 +131,147 @@ Ch - 9: Improving your view and adding Navigation
 
 1) 
 		
+=======
+6) Extend template
+	- Do not repeat yourself (DRY) to define replacable blocks
+	- Child template to inherit (extends, adds to) from site template
+	- Replace the content of parent template with the unique content by child tamplate
+	- Modify <project_name>/template/base.html to have a replacable blocks
+		- Define Set of django block tags
+		{% block <name> %} {% endblock <name> %}
+	- Create child template
+		- Create template inside <app_name>/templates/<app_name>/pages.html
+		- Namespacing your folder to by defining inner <app_name> folder
+	- Fill the child template
+		- {% extends "base.html" %}
+		- Define bock to replace the content
+	- Change views.py file to rended new child template
+		- render('pages/page.html')
+	- Template extension allows you to focus only on differences (We can reason easily, why we are using this)
+	  This will reduce number of lines in the projects to improve mainenance.
+
+Ch - 9 : Improving your view and Adding Navigation
+---------------------------------------------------------
+
+1) Modify URL to capture page links
+	- Change the urlpatterns to capture 'page' request
+	- url(r'([^/]*)', views.index, name='index'),
+
+2) How django works with the models and database
+	- python manage.py shell
+	  from pages.models import Page
+	  pg = Page.objects.get(permalink='/')
+	  pgs = Page.objects.all()
+	  pg.title to get the date
+		
+
+3) Modify our template to display our content
+3.1) Rewrite our index view to select the correct page
+	- pass the page as a parameter "pagename" in the view function
+	- Define dictionary variable "context"
+	- render with request, template, context
+
+3.2) Testing the view
+	- 'assert False' before rendering the html file
+
+3.3) Improve the page template
+	- Include the "context variables" in the template file
+	- Django automatically "autoescape" HTML before rendering for preventing attacker to inject the code
+	- Include <page last updated> and set the page title
+
+4) Turn the placeholder menu into a navigation menu
+	- Pass all the objects in the context dictionary
+	- In the page.html, we displayed all the list by looping
+	- <nav id=> is the tag to display side navigation
+	
+5) More tags and filters
+	- from django.shortcuts import get_object_or_404
+	- Debug is True, then the 404 will not be displayed
+	- runserver with --insecure option
+	- Define "404.html" template in the site location and it extends "site" template 
+
+Ch - 10: Creating a Contact Form
+-----------------------------------
+
+1) HTML forms are the primary means of collecting information from website visitors and users 
+	Eg. Google's simple search box to large, multi-page submissions
+2) design forms from scratch
+	- If you have a special application in mind, then write from scratch
+	- create the HTML form elements in templates, use Django views to validate and manage the input data
+	- It is not recommended
+
+3) Django "form" class takes care of most of the form processing and validation for you
+
+	Steps:
+	-------
+4) Create a "contact" form in Pages
+	- pages/forms.py file creation
+		# Form class is same as Django Model class
+		from django import forms
+
+		class ContactForm(forms.Form):
+			subject = forms.CharField(max_length=100)
+			email = forms.EmailField(required=False,label='Your e-mail address')
+			message = forms.CharField(widget=forms.Textarea)
+
+5) Add our form to the list of URLs in pages app
+	- edit pages/urls.py
+	- urlpatterns = [ url('^contact$', views.contact, name="contact" ),
+				.... url('([^/]*)')
+			]
+	-
+
+6) Add navigation to our site template
+	- Link our contact form in base.html <site template>
+	- <li><a href="/contact">Contact Us</a></li> after the "sidenav" bloc
+
+7) Create a template for the contact form
+	- create contact.html in templates/pages
+	- extends pages/pages.html {% extends "pages/pages.html" %}
+	- "title and content" block is overriden here
+	- If "submitted" is True, then send the "successful" message
+		- {% if %}
+		- {% else %} , {% endif %}
+	- Otherwise, load the contact form in the Table
+		- "as_table" field render the form field as table rows
+		- "Submit" button will not be there and need to mention it in the table &nbsp , <input >
+	- {% csrf_token %} to avoid CSRF (Cross Site Request Forgery) in the POST request
+
+8) Create a view to manage the contact form
+	- Create a "contact" function in views.py
+	- if request is POST, then the form data 
+		- form data validated
+		- form data cleaned
+		- send the email based on the form data
+		- HttpRedirect to another URL
+		- Change flag variable "submitted" to True
+	- If request is GET, then
+		- Form will be loaded from templates
+		- Request is having "submitted" parameter, then the "Thanks" message displayed
+
+Ch - 11 : Build a more complex Form:
+----------------------------------------------
+
+1) Get users info (sales, survey and personal info) and store it in the database.
+	- Creating forms from Django model (ModelForm)
+	- Customers (new / existing) request for quotation
+
+	Procedure
+	-------------
+1. Create the quotes app
+	- Django app should do one thing (python manage.py startapp quotes)
+2. Create the Quote model and add it to the database
+	-
+3. Add the Quote model to the Django admin
+	-
+4. Create the QuoteForm model form for collecting the quote request
+information from the user
+	-
+5. Add a new view to manage the form
+	-
+6. Create the form template
+	-
+7. Add our new view and form to our urls.py and update the site
+template to link to the quote form
+>>>>>>> c9965c7928e94ef291595fd38a8a9e7ec09438f6
 	-
