@@ -114,7 +114,6 @@ Ch - 8: Django Templates
 	- from django.shortcuts import render
 	- return render(request, "base.html")
 
-<<<<<<< HEAD
 6) DRY (Don't Repeat Yourself) principle to extend the page
 	- Do not repeat the same information in all of our templates
 	- Define replacable blocks in the parent template
@@ -126,12 +125,6 @@ Ch - 8: Django Templates
 		- Define block contents to replace parent block content
 	- static files are separated to improve scalability
 
-Ch - 9: Improving your view and adding Navigation
----------------------------------------------------
-
-1) 
-		
-=======
 6) Extend template
 	- Do not repeat yourself (DRY) to define replacable blocks
 	- Child template to inherit (extends, adds to) from site template
@@ -260,18 +253,111 @@ Ch - 11 : Build a more complex Form:
 	-------------
 1. Create the quotes app
 	- Django app should do one thing (python manage.py startapp quotes)
+
 2. Create the Quote model and add it to the database
-	-
+	- from django.db import models
+	  from django.contrib.auth.models import User
+	- Define two tuples STATUS_CHOICES, PRIORITY_CHOICES (tuple of two elements)
+		- It will translate into a drop-down list of options in both the admin
+		  and on the website.
+		- This could also be entered as a list of tuples, however, best-practice 
+		  is to use tuples as they are immutable (can't be changed).
+	- class QuoteModel(models.Model)
+	- CharFiled, EmailField, URLField, TextField, FileField, DecimalField, ForeignKey
+		- FileField has the "upload_to" attribute to upload the files in the specific folder
+		- ForeignKey to link the User Model
+	- def __str__(self):
+		return str(self.id)
+
 3. Add the Quote model to the Django admin
-	-
-4. Create the QuoteForm model form for collecting the quote request
-information from the user
-	-
+	- quotes/admin.py
+	- from .models import QuoteModel
+	- from django.contrib import admin
+	- Define model admin class (QuoteAdmin)
+		class QuoteAdmin(admin.ModelAdmin)
+			list_display
+			list_filter
+			readonly_fields
+			fieldsets
+	- admin.site.register(QuoteModel, QuoteAdmin)
+	
+4. Create the QuoteForm model form for collecting the quote request information from the user
+	- from django import forms
+	  from django.forms import ModelForm
+	  from .models import Quote
+	- class QuoteForm(ModelForm):
+		required_css_class = 'required'
+		class Meta:
+			model = QuotesModel
+			fields = [
+				'name', 'position', 'company', 'address',
+				'phone', 'email', 'web', 'description',
+				'sitestatus', 'priority', 'jobfile'
+				]
 5. Add a new view to manage the form
-	-
+	- from django.shortcuts import render
+	- from django.http import HttpResponseRedirect
+	- from .models import QuotesModel
+	- from .forms import QuoteForm
+	- from pages.models import Page
+
+	def quote_req(request):
+	    submitted = False
+	    if request.method == 'POST':
+		form = QuoteForm(request.POST, request.FILES)
+		if form.is_valid():
+		    form.save()
+		return HttpResponseRedirect('/quotes?submitted=True')
+	    else:
+		form = QuoteForm()
+		if 'submitted' in request.GET:
+		    submitted = True
+	    return render(request, 'quotes/quotes.html', {'form': form, 'page_list': Page.objects.all(), 'submitted': submitted})
+
 6. Create the form template
-	-
+
+	{% extends "base.html" %}
+
+	{% block title %}Quote Request{% endblock title %}
+
+	{% block sidenav %}
+	{% for page in page_list %}
+	<li><a href="{{ page.permalink }}">{{ page.title }}</a></li>
+	{% endfor %}
+	{% endblock sidenav %}
+
+	{% block content %}
+	<h1>Quote Request</h1>
+
+	{% if submitted %}
+		<p class="success">
+		Your quote was submitted successfully. Thank
+		you.
+		</p>
+
+	{% else %}
+	<form action="" enctype="multipart/form-data"
+			   method="post" novalidate>
+		<table>
+			{{ form.as_table }}
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type="submit" value="Submit"></td>
+
+			</tr>
+		</table>
+		{% csrf_token %}
+	</form>
+	{% endif %}
+	{% endblock content %}
+
+	
 7. Add our new view and form to our urls.py and update the site
 template to link to the quote form
->>>>>>> c9965c7928e94ef291595fd38a8a9e7ec09438f6
-	-
+	- url(r'^quote', include('quotes.urls')) in <project_name>/urls.py
+	- Create urls.py file inside quotes
+	  from django.conf.urls import url
+	  from . import views
+	  urlpatterns = [
+		url(r'^$', views.quote_req, name='quote-request'),
+	   	]

@@ -19,6 +19,7 @@ import pages
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^quotes', include('quotes.urls')),
 #    url(r'^$', include(pages.urls)), # Module object has no attribute of urls
     url(r'^', include('pages.urls')),
 ]
