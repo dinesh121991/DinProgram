@@ -7,6 +7,11 @@ from .models import QuotesModel
 from .forms import QuoteForm
 from pages.models import Page
 
+from django.views.generic import ListView
+class QuoteList(ListView):
+    model = QuotesModel
+    context_object_name = "all_quotes"
+
 def quote_req(request):
     submitted = False
     if request.method == 'POST':
