@@ -281,7 +281,7 @@ Ch - 11 : Build a more complex Form:
 			fieldsets
 	- admin.site.register(QuoteModel, QuoteAdmin)
 	
-4. Create the QuoteForm model form for collecting the quote request information from the user
+4. Create the QuoteForm, which is the ModelForm for collecting the quote request information from the user
 	- from django import forms
 	  from django.forms import ModelForm
 	  from .models import Quote
@@ -293,7 +293,8 @@ Ch - 11 : Build a more complex Form:
 				'name', 'position', 'company', 'address',
 				'phone', 'email', 'web', 'description',
 				'sitestatus', 'priority', 'jobfile'
-				]
+			]
+
 5. Add a new view to manage the form
 	- from django.shortcuts import render
 	- from django.http import HttpResponseRedirect
@@ -315,6 +316,9 @@ Ch - 11 : Build a more complex Form:
 	    return render(request, 'quotes/quotes.html', {'form': form, 'page_list': Page.objects.all(), 'submitted': submitted})
 
 6. Create the form template
+	- Inheriting from the site's base template
+	- major difference the HTML form has to be a multi-part form, so we can upload the file with the form
+	- 
 
 	{% extends "base.html" %}
 
@@ -354,10 +358,110 @@ Ch - 11 : Build a more complex Form:
 	
 7. Add our new view and form to our urls.py and update the site
 template to link to the quote form
-	- url(r'^quote', include('quotes.urls')) in <project_name>/urls.py
+	- url(r'^quotes', include('quotes.urls')) in <project_name>/urls.py
 	- Create urls.py file inside quotes
 	  from django.conf.urls import url
 	  from . import views
 	  urlpatterns = [
 		url(r'^$', views.quote_req, name='quote-request'),
-	   	]
+	  ]
+	- Add the hyperlink in <project_name>/base.html
+		<li><a href="/quote">Get a Quote</a></li>
+
+Ch - 12 Django's Generic Views
+-------------------------------
+
+- view is a piece of code that accepts a request and returns a response.
+
+- function-based and class-based views are different style of implementation with their own trade offs
+
+- Class based views advantages
+	- Ability to implement HTTP methods like GET and POST as class
+	  methods, instead of conditional branching in function-based views;
+	- Extending and adding functionality to basic classes with inheritance;
+	- Allowing the use of mixins and other object-oriented techniques; and
+	- Abstracting common idioms and patterns into generic views to make
+	  view development easier for common cases.
+
+- Class-based views aid rapid application development
+
+- Generic views are available for common case
+	- All generic views extends from View class
+	- Two base views TemplateView, RedirectView
+	- Number of generic views to make view development easier
+		- DetailView, ListView
+		- number of generic editing views and generic date views provided by Django
+	- TemplateView returns the "named template with a context"
+	- RedirectViews redirect to the URL
+	- Implement class-based views
+		- Inheritence 
+		- Use the generic view classes
+			- TemplateView.as_view(template_name="pages/pages.html")
+			- blank page template is returned
+- View Records with ListView
+	- from django.views.generic import ListView
+	- class QuoteList(ListView):		// Inherit ListView
+	    model = QuoesModel			// Model to list
+	    context_object_name = "all_quotes"	// QuerySet passed to the template
+
+- update the URLs in our quotes app
+	- from .views import QuoteList
+	  urlpatterns = [ url(r'^$', views.quote_req, name='quote-request'),
+                url(r'^show', QuoteList.as_view(), name="show-quotes")
+              ]
+
+- Django's generic views makes some assumptions
+	- Template for the generic view is going to be the "model name" 
+	  with "_list.html" appended (Eg. quotesmodel_list.html)
+	- \quotes\templates\quotes\quote_list.html
+
+		{% extends "quotes/quotes.html" %}
+
+		{% block title %}All Quotes{% endblock title %}
+
+		{% block content %}
+		<h1>All Quotes</h1>
+
+		<ul>
+			{% for quote in all_quotes %}
+			<li>{{ quote.name }}</li>
+			{% endfor %}
+		</ul>
+
+		{% endblock content %}
+
+- You are Agile Now!
+	- It might not seem like it, but this iterative approach to development-getting a simple
+	  piece of code working and then building on it to create the outcome you want-is the
+	  basis of agile software development.
+	- While there are many different methodologies built upon this concept (Scrum, for
+ 	  example), they all share the same basic principle.
+	- If you get into the habit of asking yourself "what is the minimum amount of code I
+	  need to write to demonstrate this works?" you are well on your way to becoming a
+	  professional programmer.
+
+- Improving the Quote List Template
+	- eplacing the simple list we used to test the template with a table and rendering 
+	  each quote record as a row in the table
+	- New Django template tags and filters while we build the template
+	- <table style="border-collapse:collapse"> to avoid CSS formatting
+	- The format string "m-d-y"
+	- Additional filter is added to set the default to the word "pending"
+	- default filter (--) to substitute, when the quote price is zero
+	- cycle is a built-in template tag that alternates between all the values listed inside the tag
+	- Django's generic views make passing in context information very easy by defining a special method called get_context_data
+	- "get_context_data" merges all context data from any parent classes of the current class
+	- we are simply adding the page_list QuerySet to the context dictionary
+	- Add the quote list page, update your base template
+	
+- Viewing a single record with DetailView
+	- Create the new detail view - QuoteView;
+		- in \quotes\views.py
+		- from django.views.generic import ListView, DetailView
+		- Define "QuoteView" class by inheriting "DetailView"
+	- Add a new URLconf that will display the detail view;
+		- The group (?P<pk>[0-9]+) is what is called a named group 
+		  (see Chapter 5 for more on named groups in regular expressions)
+	- Create the detail view template;
+	- Add some CSS so the detail view matches our site template; and
+	- Modify the quote list template to link to the detail view.
